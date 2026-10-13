@@ -1,0 +1,26 @@
+title: Encoded PowerShell Scheduled Task Persistence Detection
+id: d45e812b-77f9-4b1a-9f5b-111111110005
+status: experimental
+description: Detects scheduled task creations using schtasks.exe that execute encoded PowerShell commands.
+author: Ahmad Alqassab
+references:
+  - [https://github.com/AHMAD9ALKASAB/SOC-Incident-Reports](https://github.com/AHMAD9ALKASAB/SOC-Incident-Reports)
+logsource:
+  product: windows
+  service: security
+detection:
+  selection_event:
+    EventID: 4688
+  selection_cli:
+    CommandLine|contains|all:
+      - 'schtasks'
+      - '/Create'
+      - 'powershell'
+      - '-e'
+  condition: selection_event and selection_cli
+falsepositives:
+  - Legitimate administrative tasks using encoded commands (rare, requires baseline)
+level: high
+tags:
+  - attack.persistence
+  - attack.t1053.005
