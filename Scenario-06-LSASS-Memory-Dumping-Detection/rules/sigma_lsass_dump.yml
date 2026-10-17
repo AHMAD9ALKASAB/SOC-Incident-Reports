@@ -1,0 +1,22 @@
+title: LSASS Memory Access via Procdump or Credential Dumping Tools
+id: d45e812b-77f9-4b1a-9f5b-111111110006
+status: experimental
+description: Detects process access to lsass.exe with read permissions associated with credential dumping.
+author: Ahmad Alqassab
+references:
+  - https://github.com/AHMAD9ALKASAB/SOC-Incident-Reports
+logsource:
+  product: windows
+  service: sysmon
+detection:
+  selection:
+    EventID: 10
+    TargetImage|endswith: '\lsass.exe'
+    GrantedAccess: '0x1010'
+  condition: selection
+falsepositives:
+  - Legitimate security software or EDR monitoring agents
+level: high
+tags:
+  - attack.credential_access
+  - attack.t1003.001
