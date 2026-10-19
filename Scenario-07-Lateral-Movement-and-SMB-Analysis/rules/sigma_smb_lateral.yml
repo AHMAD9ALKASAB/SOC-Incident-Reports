@@ -1,0 +1,25 @@
+title: Internal Lateral Movement via Suspicious SMB Share Access
+id: d45e812b-77f9-4b1a-9f5b-111111110007
+status: experimental
+description: Detects outbound SMB connections targeting administrative shares (C$, Admin$) initiated between endpoint workstations.
+author: Ahmad Alqassab
+references:
+  - https://github.com/AHMAD9ALKASAB/SOC-Incident-Reports
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 5140
+    ShareName|contains:
+      - 'C$'
+      - 'ADMIN$'
+  filter_servers:
+    SourceAddress|startswith: '10.0.1.'
+  condition: selection and not filter_servers
+falsepositives:
+  - Legitimate administrative tools or SCCM software updates
+level: high
+tags:
+  - attack.lateral_movement
+  - attack.t1021.002
