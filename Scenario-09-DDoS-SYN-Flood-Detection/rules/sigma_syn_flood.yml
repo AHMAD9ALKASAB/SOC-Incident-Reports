@@ -1,0 +1,22 @@
+title: Distributed TCP SYN Flood Attack Detection
+id: d45e812b-77f9-4b1a-9f5b-111111110009
+status: experimental
+description: Detects high-volume volumetric SYN packets directed at a single destination from multiple distinct IP addresses within a short timeframe.
+author: Ahmad Alqassab
+references:
+  - https://github.com/AHMAD9ALKASAB/SOC-Incident-Reports
+logsource:
+  product: firewall
+  service: packet_filter
+detection:
+  selection:
+    DestinationPort: [80, 443]
+    TcpFlags: 'SYN'
+  timeframe: 5s
+  condition: selection | count(SourceIp) > 3 and count() > 20000
+falsepositives:
+  - Legitimate flash-crowd traffic or massive corporate proxy egress points
+level: high
+tags:
+  - attack.impact
+  - attack.t1498.001
