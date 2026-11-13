@@ -42,8 +42,11 @@ index=sysmon EventCode=1
 | search ParentImage IN ("*\\winword.exe", "*\\excel.exe") AND Image IN ("*\\powershell.exe", "*\\cmd.exe")
 | eval threat_indicator="Potential VBA Stomping - Office Spawning Shell"
 | table _time, host, ParentImage, Image, CommandLine, threat_indicator
+
 ### 2. Sigma Rule (YAML) - Validated with Sigma-Intuition
 Note: This rule was audited using Sigma-Intuition. The initial draft scored 40/100 (flagged for missing EVD001 coverage and PRF001 wildcards). After refining the rule to cover encoded commands, the score improved to 80/100. The remaining PRF001 is an accepted trade-off for broad coverage.
+
+<img width="997" height="725" alt="sigma-intuition-validation" src="https://github.com/user-attachments/assets/a4fe3cfe-567d-42de-b854-3929ca587382" />
 
 title: Microsoft Office Application Spawning Command Shell
 id: a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d
@@ -76,6 +79,7 @@ detection:
 falsepositives:
     - Legitimate internal administrative scripts or automated macro reporting tools.
 level: high
+
 ## 💡 Philosophy: "Code Intuition" (فراسة الكود)
 
 VBA Stomping is a psychological attack before it is a technical one; it manipulates the human element (the employee opening the invoice) to gain execution. Effective detection engineering requires looking beyond the file extension to analyze the process lineage (Parent-Child relationship). We must ask: Why is a word processor spawning a command shell? And when writing the detection rule, we must use our own tools (like Sigma-Intuition) to ensure our defenses are as flawless as the adversary's attack.
