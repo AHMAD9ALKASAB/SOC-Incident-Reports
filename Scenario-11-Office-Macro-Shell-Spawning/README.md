@@ -48,6 +48,7 @@ Note: This rule was audited using Sigma-Intuition. The initial draft scored 40/1
 
 <img width="997" height="725" alt="sigma-intuition-validation" src="https://github.com/user-attachments/assets/a4fe3cfe-567d-42de-b854-3929ca587382" />
 
+```yaml
 title: Microsoft Office Application Spawning Command Shell
 id: a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d
 status: experimental
@@ -79,7 +80,7 @@ detection:
 falsepositives:
     - Legitimate internal administrative scripts or automated macro reporting tools.
 level: high
-
+```
 ## 💡 Philosophy: "Code Intuition" (فراسة الكود)
 
 VBA Stomping is a psychological attack before it is a technical one; it manipulates the human element (the employee opening the invoice) to gain execution. Effective detection engineering requires looking beyond the file extension to analyze the process lineage (Parent-Child relationship). We must ask: Why is a word processor spawning a command shell? And when writing the detection rule, we must use our own tools (like Sigma-Intuition) to ensure our defenses are as flawless as the adversary's attack.
