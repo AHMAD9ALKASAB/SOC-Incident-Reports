@@ -38,10 +38,12 @@ To immediately restore service availability and mitigate the threat:
 To proactively catch this attack vector across the enterprise SIEM:
 
 ### 1. Splunk SPL Query (Anomalous Office Shell Spawning)
+```splunk
 index=sysmon EventCode=1
 | search ParentImage IN ("*\\winword.exe", "*\\excel.exe") AND Image IN ("*\\powershell.exe", "*\\cmd.exe")
 | eval threat_indicator="Potential VBA Stomping - Office Spawning Shell"
 | table _time, host, ParentImage, Image, CommandLine, threat_indicator
+```
 
 ### 2. Sigma Rule (YAML) - Validated with Sigma-Intuition
 Note: This rule was audited using Sigma-Intuition. The initial draft scored 40/100 (flagged for missing EVD001 coverage and PRF001 wildcards). After refining the rule to cover encoded commands, the score improved to 80/100. The remaining PRF001 is an accepted trade-off for broad coverage.
