@@ -1,0 +1,32 @@
+title: Microsoft Office Application Spawning Command Shell
+id: a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d
+status: experimental
+description: Detects Microsoft Office applications spawning command line interpreters, which is a strong indicator of malicious macro execution or phishing payloads.
+references:
+    - https://attack.mitre.org/techniques/T1566/001/
+    - https://attack.mitre.org/techniques/T1059/005/
+author: Ahmad Alqassab (SOC Detection Engineer)
+date: 2026/11/12
+tags:
+    - attack.t1566.001
+    - attack.t1059.005
+logsource:
+    product: windows
+    service: sysmon
+detection:
+    # PRF001 accepted: Needed for broad coverage of System32 and SysWOW64 paths.
+    selection_parent:
+        ParentImage|endswith:
+            - '\winword.exe'
+            - '\excel.exe'
+            - '\powerpnt.exe'
+    selection_child:
+        Image|endswith:
+            - '\cmd.exe'
+            - '\powershell.exe'
+            - '\wscript.exe'
+            - '\cscript.exe'
+    condition: selection_parent and selection_child
+falsepositives:
+    - Legitimate internal administrative scripts or automated macro reporting tools.
+level: high
